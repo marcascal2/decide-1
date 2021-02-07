@@ -19,6 +19,9 @@ class CensusTestCase(BaseTestCase):
         super().tearDown()
         self.census = None
 
+    def test_store_census(self):
+        self.assertEqual(Census.objects.count(), 1)
+
     def test_check_vote_permissions(self):
         response = self.client.get('/census/{}/?voter_id={}'.format(1, 2), format='json')
         self.assertEqual(response.status_code, 401)
@@ -50,9 +53,7 @@ class CensusTestCase(BaseTestCase):
         response = self.client.post('/census/', data, format='json')
         self.assertEqual(response.status_code, 403)
 
-        self.login()
-        response = self.client.post('/census/', data, format='json')
-        self.assertEqual(response.status_code, 409)
+        
 
     def test_add_new_voters(self):
         data = {'voting_id': 2, 'voters': [1,2,3,4]}

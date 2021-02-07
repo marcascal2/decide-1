@@ -15,6 +15,26 @@ from mixnet.mixcrypt import MixCrypt
 from mixnet.models import Auth
 from voting.models import Voting, Question, QuestionOption
 
+class VotingModelTC(BaseTestCase):
+    def setUp(self):
+        q = Question(desc='question')
+        q.save()
+        opt1 = QuestionOption(question=q, option='uno')
+        opt1.save()
+        opt2 = QuestionOption(question=q, option='dos')
+        opt2.save()
+        v = Voting(name='VotingTest', desc='Description', question=q)
+        self.v = v
+        self.v.save()
+        super().setUp()
+
+    def tearDown(self):
+        super().tearDown()
+        self.v = None
+    
+    def testExist(self):
+        v = Voting.objects.get(name='VotingTest')
+        self.assertEqual(v.question.options.all()[0].option, 'uno')
 
 class VotingTestCase(BaseTestCase):
 
@@ -23,6 +43,12 @@ class VotingTestCase(BaseTestCase):
 
     def tearDown(self):
         super().tearDown()
+    
+    def test_Voting_toString(self):
+        v = self.create_voting()
+        self.assertEquals(str(v),"test voting")
+        self.assertEquals(str(v.question),"test question")
+        self.assertEquals(str(v.question.options.all()[0]),"option 1 (2)")
 
     def encrypt_msg(self, msg, v, bits=settings.KEYBITS):
         pk = v.pub_key

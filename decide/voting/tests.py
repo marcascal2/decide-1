@@ -35,6 +35,19 @@ class VotingModelTC(BaseTestCase):
     def testExist(self):
         v = Voting.objects.get(name='VotingTest')
         self.assertEqual(v.question.options.all()[0].option, 'uno')
+    
+    def testCreateVotingAPI(self):
+        self.login()
+        data = {
+            'name': 'APIExample',
+            'desc': 'Description example',
+            'question': 'I want a ',
+            'question_opt': ['cat', 'dog', 'horse']
+        }
+        response = self.client.post('/voting/', data, format='json')
+        self.assertEquals(response.status_code, 201)
+        v = Voting.objects.get(name='APIExample')
+        self.assertEquals(v.desc, 'Description example')
 
 class VotingTestCase(BaseTestCase):
 

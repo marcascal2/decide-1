@@ -155,6 +155,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+BASEURL = 'https://mi-decide1.herokuapp.com'
 
 # number of bits for the key, all auths should use the same number of bits
 KEYBITS = 256
@@ -172,8 +173,6 @@ APIS = {
 # Versioning
 ALLOWED_VERSIONS = ['v1', 'v2']
 DEFAULT_VERSION = 'v1'
-
-BASEURL = 'https://mi-decide1.herokuapp.com'
 
 try:
     from local_settings import *
